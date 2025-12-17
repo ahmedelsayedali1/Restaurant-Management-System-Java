@@ -1,17 +1,92 @@
-# Restaurant-Management-System-Java
-A mini restaurant order management application developed using Java and the Swing library for Graphical User Interface (GUI). It allows users to calculate costs, apply taxes, and save detailed invoices to a text file.
+# 🥙 Restaurant Management System (Java Swing)
 
-# 🍴 Mini Restaurant Management System (Java Swing GUI)
+This repository features a robust Desktop Application developed in **Java** using the **Swing** framework. It simulates a Point of Sale (POS) system for a "Falafel & Street Food" restaurant, featuring a modern Dark Mode UI, real-time calculations, and an invoice generation system.
 
-This project is a small application designed to manage and process orders for a hypothetical restaurant. It is built entirely in **Java** utilizing the **Swing** library for a simple Graphical User Interface (GUI) and developed using the NetBeans IDE.
+## 📸 Screenshots
 
-The application simulates the process of taking orders, calculating costs, and generating an invoice.
+### 1. Secure Login System
+The gateway to the application features a modern dark-themed login interface.
+
+![Login Screen](screenshots/login.png)
+
+### 2. Interactive Dashboard
+The main operational hub where orders are taken, extras are added, and costs are calculated in real-time.
+
+![Dashboard Screen](screenshots/dashboard.png)
+
+### 3. Invoice Generation
+An example of the auto-generated text receipt saved by the system.
+
+![Invoice Example](screenshots/invoice_example.png)
+
+---
 
 ## ✨ Key Features
 
-* **Order Tracking:** Tracks orders for food items (e.g., Chicken and Meat Shawarma) and beverages (Water, Juice).
-* **Add-ons:** Option to add cheese to sandwiches with an extra charge per item.
-* **Automatic Calculation:** Calculates the Subtotal, Tax (5%), and Grand Total upon clicking the "Calculate" button.
-* **Invoice Management:**
-    * **Save Invoice:** Saves the complete order details, costs, and totals to a sequentially numbered text file (`.txt`).
-    * **New Invoice:** Resets all fields and counters to start a new order for the next customer.
+### 1. Secure Login System (`LogIn.java`)
+A stylized login interface that serves as the gateway to the dashboard.
+* **Modern UI:** Custom-styled text fields and buttons with a dark color palette.
+* **Authentication:** Validates username and password before granting access.
+* **Default Credentials:** `admin` / `1234`
+
+### 2. Interactive Dashboard (`DashBoard.java`)
+The core operational window divided into logical sections:
+* **Menu Selection:** Interactive items (Falafel, Foul) with quantity spinners (`JSpinner`).
+* **Customization:** Checkboxes to add extras (e.g., Eggplant for food, Ice for drinks) which dynamically adjust the unit price.
+* **Billing Engine:**
+    * Calculates **Subtotal** automatically.
+    * Applies a **5% Tax** rate.
+    * Displays the final **Total Amount**.
+
+### 3. File Handling & Invoicing
+The system implements persistent data storage using `java.io`.
+* **Save Invoice:** Generates a detailed `.txt` receipt containing the Order ID, Date/Time, Itemized List, and Total Cost.
+* **File Organization:** Automatically creates a directory to store invoices if it doesn't exist.
+
+## 🛠️ Technical Implementation
+
+* **Language:** Java (JDK 8+)
+* **GUI Framework:** Swing & AWT (Abstract Window Toolkit).
+* **Layout Managers:** `GridBagLayout` (for centering Login) and `GridLayout` (for Dashboard structure).
+* **Concepts:**
+    * Object-Oriented Programming (OOP).
+    * Event Handling (`ActionListener`).
+    * File I/O (`PrintWriter`, `File` classes).
+    * Date & Time API (`LocalDateTime`).
+
+## ⚙️ Configuration (Important)
+
+> **⚠️ Note:** The current version uses absolute file paths for images and invoice saving.
+> Before running, please update the paths in the code to match your machine:
+> 1. **Images:** Search for `"C:\\Users\\..."` in `LogIn.java` and update it to your local image path.
+> 2. **Invoices:** In `DashBoard.java`, update the `folderPath` variable to your desired save location.
+
+## 🚀 Getting Started
+
+1. **Compile the code:**
+    ```bash
+    javac Practical/*.java
+    ```
+
+2. **Run the application:**
+    ```bash
+    java Practical.LogIn
+    ```
+
+## 📂 Invoice Example (`.txt`)
+
+When a user saves an order, the system outputs a file formatted as follows:
+
+```text
+******** مطعم فلافل ********
+رقم الفاتورة: 1
+التاريخ: 2025/12/13 21:44:41
+============================
+2x فلافل (بالباذنجان) ... 14.0
+2x عصير (مثلج) ...... 24.0
+----------------------------
+المجموع:  38.0
+الضريبة:  1.9
+الإجمالي: 39.9 جنية
+============================
+     شكراً لزيارتكم
