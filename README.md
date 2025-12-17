@@ -12,7 +12,7 @@ The gateway to the application features a modern dark-themed login interface.
 ### 2. Interactive Dashboard
 The main operational hub where orders are taken, extras are added, and costs are calculated in real-time.
 
-![Dashboard Screen](screenshots/dashboard.png)
+![Dashboard Screen](![Screenshot](screenshots/menu.png))
 
 ### 3. Invoice Generation
 An example of the auto-generated text receipt saved by the system.
