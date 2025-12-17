@@ -2,10 +2,6 @@
 
 This repository features a robust Desktop Application developed in **Java** using the **Swing** framework. It simulates a Point of Sale (POS) system for a "Falafel & Street Food" restaurant, featuring a modern Dark Mode UI, real-time calculations, and an invoice generation system.
 
-## 🌐 Live Online Simulation
-You can experience a web-based simulation of this project running live on Replit without downloading any files.
-👉 **[Click Here to Try the Dashboard Online](https://6d21fe37-b264-4780-a575-2b5a00717875-00-3rr7igr7vluqr.worf.replit.dev/dashboard)**
-
 ---
 ## 📸 Screenshots
 
