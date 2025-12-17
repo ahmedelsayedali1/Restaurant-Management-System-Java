@@ -7,7 +7,7 @@ This repository features a robust Desktop Application developed in **Java** usin
 ### 1. Secure Login System
 The gateway to the application features a modern dark-themed login interface.
 
-![Login Screen](screenshots/Screenshot 2025-12-17 114945.png)
+![Login Screen](screenshots/dashboard-screenshot.png)
 
 ### 2. Interactive Dashboard
 The main operational hub where orders are taken, extras are added, and costs are calculated in real-time.
