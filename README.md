@@ -17,7 +17,7 @@ The main operational hub where orders are taken, extras are added, and costs are
 ### 3. Invoice Generation
 An example of the auto-generated text receipt saved by the system.
 
-![Invoice Example]([screenshots/invoice_example.png](https://github.com/ahmedelsayedali1/Restaurant-Management-System-Java/blob/main/screenshots/Screenshot%202025-12-17%20115139.png))
+![Invoice Example](![Invoice Example](screenshots/Screenshot%202025-12-17%20115139.png)
 
 ---
 
