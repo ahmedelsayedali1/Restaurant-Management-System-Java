@@ -91,3 +91,9 @@ When a user saves an order, the system outputs a file formatted as follows:
 الإجمالي: 39.9 جنية
 ============================
      شكراً لزيارتكم
+
+## 🌐 Live Online Simulation
+You can experience a web-based simulation of this project running live on Replit without downloading any files.
+👉 **[Click Here to Try the Dashboard Online](https://6d21fe37-b264-4780-a575-2b5a00717875-00-3rr7igr7vluqr.worf.replit.dev/dashboard)**
+
+---
