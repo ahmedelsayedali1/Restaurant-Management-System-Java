@@ -19,6 +19,8 @@ An example of the auto-generated text receipt saved by the system.
 
 ![Invoice Example](![Invoice Example](screenshots/Screenshot%202025-12-17%20115139.png)
 
+
+
 ---
 
 ## ✨ Key Features
