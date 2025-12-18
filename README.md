@@ -65,6 +65,11 @@ The system implements persistent data storage using `java.io`.
 
 ## 🚀 Getting Started
 
+1. **Direct Execution** (Quick Try)
+If you want to test the application immediately without compiling the source code:
+Download and run the Resturant_Manegement.exe file included in this repository.
+   *Login Credentials: admin / 1234
+
 1. **Compile the code:**
     ```bash
     javac Practical/*.java
