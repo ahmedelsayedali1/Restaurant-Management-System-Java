@@ -65,17 +65,22 @@ The system implements persistent data storage using `java.io`.
 
 ## 🚀 Getting Started
 
-1. **Direct Execution** (Quick Try)
+### 1. Direct Execution (Quick Start)
 If you want to test the application immediately without compiling the source code:
-Download and run the Resturant_Manegement.exe file included in this repository.
-   *Login Credentials: admin / 1234
+* **Download:** Locate the `Resturant_Manegement.exe` file in this repository.
+* **Run:** Double-click the file to launch the application directly on Windows.
+* **Default Credentials:** * **Username:** `admin`
+    * **Password:** `1234`
 
-1. **Compile the code:**
+### 2. Manual Compilation
+If you prefer to build the project from the source files:
+
+1. **Compile the source code:**
     ```bash
     javac Practical/*.java
     ```
 
-2. **Run the application:**
+2. **Launch the application:**
     ```bash
     java Practical.LogIn
     ```
