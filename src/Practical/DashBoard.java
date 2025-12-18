@@ -1,469 +1,450 @@
 package Practical;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.FlowLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import javax.swing.ImageIcon;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.JCheckBox;
-import java.awt.Component;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import java.awt.Cursor;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.awt.event.ActionEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.Toolkit;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 public class DashBoard extends JFrame {
 
-	int flaflNum, folNum, waterNum, juiceNum;
+    private static final long serialVersionUID = 1L;
+    
+    // --- Variables ---
+    // Item counters and individual item total prices
+    int flaflNum, folNum, waterNum, juiceNum;
     double flaflPrice, folPrice, waterPrice, juicePrice;
-    final double FLAFL_COST = 5.0, FOL_COST = 4.0, WATER_COST = 5.0, JUICE_COST = 10.0;
+    
+    // --- Base Costs ---
+    final double FLAFL_COST = 5.0;
+    final double FOL_COST = 4.0;
+    final double WATER_COST = 5.0;
+    final double JUICE_COST = 10.0;
+    
+    // --- Add-ons Costs ---
+    final double EXTRA_EGGPLANT = 2.0;
+    final double EXTRA_ICE = 2.0;
+
+    // Totals and Invoice Management
     double subtotal, tax, total;
-    int numberOfInvoice;
+    int numberOfInvoice = 1;
     PrintWriter output;
 
-    private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DashBoard frame = new DashBoard();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    // --- Dark Theme Colors ---
+    Color darkBackground = new Color(43, 43, 43);
+    Color panelBackground = new Color(60, 63, 65);
+    Color textColor = new Color(230, 230, 230);
+    Color accentColor = new Color(75, 110, 175);
+    Color successColor = new Color(46, 204, 113);
+    Color dangerColor = new Color(231, 76, 60);
 
-	/**
-	 * Create the frame.
-	 */
-	public DashBoard() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\gamal\\Downloads\\Resturant_Manegement\\Black and White Simple Street Food Circle Logo.jpg"));
-		setTitle("Resturant Management");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 635, 416);
-		contentPane = new JPanel();
-		contentPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		
-		JLabel lblNewLabel = new JLabel("مطعم فلافل");
-		lblNewLabel.setBounds(376, 32, 132, 29);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		JLabel lblNewLabel_1 = new JLabel("Logo");
-		lblNewLabel_1.setBounds(536, 15, 68, 69);
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\gamal\\Downloads\\Resturant_Manegement\\output-onlinepngtools (1).png"));
-		
-		JPanel panelEat = new JPanel();
-		panelEat.setBounds(258, 94, 353, 139);
-		panelEat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u0627\u0644\u0645\u0623\u0643\u0648\u0644\u0627\u062A", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		JLabel lblcostFlafl = new JLabel("0.0 جنية");
-		lblcostFlafl.setHorizontalTextPosition(SwingConstants.RIGHT);
-		lblcostFlafl.setHorizontalAlignment(SwingConstants.CENTER);
-		lblcostFlafl.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblcostFlafl.setBounds(35, 24, 87, 24);
-		panelEat.add(lblcostFlafl);
-		
-		JLabel lblFlafl = new JLabel("سندوتش فلافل");
-		lblFlafl.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFlafl.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblFlafl.setBounds(256, 24, 87, 24);
-		panelEat.add(lblFlafl);
-		
-		
-		
-		JSpinner spinnerNumberFlafl = new JSpinner();
-		spinnerNumberFlafl.addChangeListener(new ChangeListener() {
-			
-			public void stateChanged(ChangeEvent e) {
-				 
-				        flaflNum = (Integer) spinnerNumberFlafl.getValue();
-				        flaflPrice = flaflNum * FLAFL_COST;
-				        lblcostFlafl.setText(flaflPrice + " جنية");
+    public static void main(String[] args) {
+        try {
+            // Set System Look and Feel and customize specific components
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.put("Spinner.background", new Color(60, 63, 65));
+            UIManager.put("CheckBox.background", new Color(60, 63, 65));
+            UIManager.put("CheckBox.foreground", new Color(230, 230, 230));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			}
-		});
-		spinnerNumberFlafl.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinnerNumberFlafl.setBounds(206, 26, 40, 24);
-		panelEat.add(spinnerNumberFlafl);
-		
-		JCheckBox spinnerbantgan1 = new JCheckBox("الباذنجان");
-		spinnerbantgan1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if (spinnerbantgan1.isEnabled()) {
-		            flaflPrice += 2;
-		        }
-				else {
-					 flaflPrice -= 2;
-				            
-				}
-				   lblcostFlafl.setText(flaflPrice + " جنية");
-			}
-		});
-		spinnerbantgan1.setHorizontalAlignment(SwingConstants.RIGHT);
-		spinnerbantgan1.setHorizontalTextPosition(SwingConstants.LEFT);
-		spinnerbantgan1.setBounds(108, 27, 92, 20);
-		panelEat.add(spinnerbantgan1);
-		
-		JLabel lblcostFol = new JLabel("0.0 جنية");
-		lblcostFol.setHorizontalTextPosition(SwingConstants.RIGHT);
-		lblcostFol.setHorizontalAlignment(SwingConstants.CENTER);
-		lblcostFol.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblcostFol.setBounds(35, 78, 87, 24);
-		panelEat.add(lblcostFol);
-		
-		JLabel lblFol = new JLabel("سندوتش فول");
-		lblFol.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFol.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblFol.setBounds(256, 78, 87, 24);
-		panelEat.add(lblFol);
-		
-		JSpinner spinnerNumberFol = new JSpinner();
-		spinnerNumberFol.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-		        folNum = (Integer) spinnerNumberFol.getValue();
-		        folPrice = folNum * FOL_COST;
-		        lblcostFol.setText(folPrice + " جنية");
+        EventQueue.invokeLater(() -> {
+            try {
+                DashBoard frame = new DashBoard();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
-			}
-		});
-		spinnerNumberFol.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinnerNumberFol.setBounds(206, 80, 40, 24);
-		panelEat.add(spinnerNumberFol);
-		
-		JCheckBox spinnerbantgan2 = new JCheckBox("الباذنجان");
-		spinnerbantgan2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+    public DashBoard() {
+        // --- Main Frame Setup ---
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ahmed\\Downloads\\Resturant_Manegement\\Resturant_Manegement\\Black and White Simple Street Food Circle Logo.jpg"));
+        setTitle("Restaurant-Management");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 997, 880);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-				if (spinnerbantgan2.isEnabled()) {
-		            folPrice += 2;
-		        }
-				else {
-					 folPrice -= 2;
-				       
-				}
-				     lblcostFol.setText(folPrice + " جنية");  
-			}
-			
-		});
-		spinnerbantgan2.setHorizontalTextPosition(SwingConstants.LEFT);
-		spinnerbantgan2.setHorizontalAlignment(SwingConstants.RIGHT);
-		spinnerbantgan2.setBounds(108, 79, 92, 20);
-		panelEat.add(spinnerbantgan2);
-		
-		
-		
-		JPanel panelDrinks = new JPanel();
-		panelDrinks.setBounds(316, 243, 295, 139);
-		panelDrinks.setLayout(null);
-		panelDrinks.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u0627\u0644\u0645\u0634\u0631\u0648\u0628\u0627\u062A", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		JLabel lblWater = new JLabel("ماء");
-		lblWater.setHorizontalTextPosition(SwingConstants.CENTER);
-		lblWater.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWater.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblWater.setBounds(222, 24, 56, 24);
-		panelDrinks.add(lblWater);
-		
-		JLabel costWater = new JLabel("0.0 جنية");
-		costWater.setHorizontalTextPosition(SwingConstants.RIGHT);
-		costWater.setHorizontalAlignment(SwingConstants.CENTER);
-		costWater.setFont(new Font("Tahoma", Font.BOLD, 12));
-		costWater.setBounds(54, 24, 71, 24);
-		panelDrinks.add(costWater);
-		
-		JSpinner spinnerBottleWater = new JSpinner();
-		spinnerBottleWater.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				
-		        waterNum = (Integer) spinnerBottleWater.getValue();
-		        waterPrice = waterNum * WATER_COST;
-		        costWater.setText(waterPrice + " جنية");
+        contentPane = new JPanel();
+        contentPane.setBackground(darkBackground);
+        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout(10, 10));
 
-			}
-		});
-		spinnerBottleWater.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinnerBottleWater.setBounds(177, 26, 40, 24);
-		panelDrinks.add(spinnerBottleWater);
-		
-		JCheckBox spinnerIce1 = new JCheckBox("ثلج");
-		spinnerIce1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+        // --- Header Panel (Top) ---
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(darkBackground);
+        
+        JLabel lblTitle = new JLabel("مطعم فلافل");
+        lblTitle.setForeground(textColor);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 36));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        headerPanel.add(lblTitle, BorderLayout.CENTER);
 
-				if (spinnerIce1.isEnabled()) {
-		            waterPrice += 1;
-		        }
-				else {
-					 waterPrice -= 1;
-				       
-				}
-				     costWater.setText(waterPrice + " جنية");  
-			}
-			
-		});
-		spinnerIce1.setHorizontalTextPosition(SwingConstants.LEFT);
-		spinnerIce1.setHorizontalAlignment(SwingConstants.RIGHT);
-		spinnerIce1.setBounds(131, 27, 40, 20);
-		panelDrinks.add(spinnerIce1);
-		
-		JLabel lblJuice = new JLabel("عصير");
-		lblJuice.setHorizontalAlignment(SwingConstants.CENTER);
-		lblJuice.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblJuice.setBounds(223, 78, 62, 24);
-		panelDrinks.add(lblJuice);
-		
-		JLabel costJuice = new JLabel("0.0 جنية");
-		costJuice.setHorizontalTextPosition(SwingConstants.RIGHT);
-		costJuice.setHorizontalAlignment(SwingConstants.CENTER);
-		costJuice.setFont(new Font("Tahoma", Font.BOLD, 12));
-		costJuice.setBounds(54, 78, 71, 24);
-		panelDrinks.add(costJuice);
-		
-		JSpinner spinnerBottleJuice = new JSpinner();
-		spinnerBottleJuice.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-		        juiceNum = (Integer) spinnerBottleJuice.getValue();
-		        juicePrice = juiceNum * JUICE_COST;
-		        costJuice.setText(juicePrice + " جنية");
+        JLabel lblLogo = new JLabel("");
+        lblLogo.setIcon(new ImageIcon("C:\\Users\\ahmed\\Downloads\\Resturant_Manegement\\Resturant_Manegement\\ana.png"));
+        headerPanel.add(lblLogo, BorderLayout.EAST);
 
-			}
-		});
-		spinnerBottleJuice.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinnerBottleJuice.setBounds(177, 80, 40, 24);
-		panelDrinks.add(spinnerBottleJuice);
-		
-		JCheckBox spinnerIce2 = new JCheckBox("ثلج");
-		spinnerIce2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if (spinnerIce2.isEnabled()) {
-		            juicePrice += 1;
-		            
-		        }
-				else {
-					 juicePrice -= 1;
-				       
-				}
-				     costJuice.setText(juicePrice + " جنية");  
-			}
-		});
-		spinnerIce2.setHorizontalTextPosition(SwingConstants.LEFT);
-		spinnerIce2.setHorizontalAlignment(SwingConstants.RIGHT);
-		spinnerIce2.setBounds(131, 81, 40, 20);
-		panelDrinks.add(spinnerIce2);
-		
-		JPanel panelAccount = new JPanel();
-		panelAccount.setBounds(29, 94, 215, 139);
-		panelAccount.setLayout(null);
-		panelAccount.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u0627\u0644\u062D\u0633\u0627\u0628", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		JLabel lblSubTotal = new JLabel("المجموع: 0.0 جنية");
-		lblSubTotal.setHorizontalTextPosition(SwingConstants.CENTER);
-		lblSubTotal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSubTotal.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblSubTotal.setBounds(42, 22, 112, 24);
-		panelAccount.add(lblSubTotal);
-		
-		JLabel lblTax = new JLabel("الضريبة:  0.0 جنية");
-		lblTax.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTax.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTax.setBounds(42, 46, 112, 24);
-		panelAccount.add(lblTax);
-		
-		JLabel lblTotal = new JLabel("الإجمالي: 0.0 جنية");
-		lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTotal.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTotal.setBounds(42, 80, 119, 24);
-		panelAccount.add(lblTotal);
-		
-		JPanel panelChoice = new JPanel();
-		panelChoice.setBounds(29, 243, 225, 139);
-		panelChoice.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u0627\u0644\u062E\u064A\u0627\u0631\u0627\u062A", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelChoice.setLayout(null);
-		
-		JSeparator jSeparator1_1 = new JSeparator();
-		jSeparator1_1.setBounds(23, 71, 192, 20);
-		jSeparator1_1.setBackground(Color.LIGHT_GRAY);
-		panelChoice.add(jSeparator1_1);
-		
-		JButton btnPrice = new JButton("حساب ");
-		btnPrice.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnPrice.setBounds(38, 28, 154, 33);
-		btnPrice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				subtotal = flaflPrice+ folPrice+ waterPrice+ juicePrice;
-				lblSubTotal.setText("المجموع: " + subtotal + " جنية");
-				
-				tax = subtotal * 0.05;
-				tax = tax * 100;
-		        tax = (double) ((int) tax);
-		        tax = tax / 100;
-				lblTax.setText("الضريبة: " + tax + " جنية");
-				
-				total = subtotal + tax;
-				lblTotal.setText("الإجمالي: " + total + " جنية");
-				
-				
-			}
-		});
-		panelChoice.add(btnPrice);
-		
-		JButton btnSaveInvoice = new JButton("حقظ الفاتورة ");
-		btnSaveInvoice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					if(total != 0) {
-					output = new PrintWriter("billNumber" +numberOfInvoice+".txt");
-					
-					output.println(numberOfInvoice + " فاتورة رقم");
-	                output.println("==============");
+        JButton btnExit = new JButton("خروج");
+        styleButton(btnExit, dangerColor);
+        btnExit.addActionListener(e -> System.exit(0));
+        headerPanel.add(btnExit, BorderLayout.WEST);
 
-	                if (flaflNum != 0) {
-	                    output.print(flaflNum + " سدوتش فلافل");
+        contentPane.add(headerPanel, BorderLayout.NORTH);
 
-	                    if (spinnerbantgan1.isEnabled()) {
-	                        output.println(" مع الباذنجان");
-	                    }
-	                    output.println(flaflPrice + " جنية");
-	                }
+        // --- Center Grid Layout ---
+        // Split into Left Column (Controls) and Right Column (Menu)
+        JPanel centerGrid = new JPanel(new GridLayout(1, 2, 20, 20));
+        centerGrid.setBackground(darkBackground);
 
-	                if (folNum != 0) {
-	                    output.print(folNum + " سندوتش فول");
+        JPanel leftColumn = new JPanel(new GridLayout(2, 1, 20, 20));
+        leftColumn.setOpaque(false);
+        JPanel rightColumn = new JPanel(new GridLayout(2, 1, 20, 20));
+        rightColumn.setOpaque(false);
 
-	                    if (spinnerbantgan2.isEnabled()) {
-	                        output.println(" مع الباذنجان");
-	                    }
-	                    output.println(folPrice + " جنية");
-	                }
+        // 1. Food Panel (Right Top)
+        JPanel panelEat = new JPanel(null);
+        stylePanel(panelEat, "المأكولات");
 
-	                if (waterNum != 0) {
-	                    output.println(waterNum + " ماء");
-	                    output.println(waterPrice + " جنية");
-	                    
-	                }
+        // === Falafel Item ===
+        JLabel lblFlafl = new JLabel("سندوتش فلافل");
+        styleLabel(lblFlafl);
+        lblFlafl.setBounds(300, 40, 150, 30);
+        panelEat.add(lblFlafl);
 
-	                if (juiceNum != 0) {
-	                    output.println(juiceNum + " عصير");
-	                    output.println(juicePrice + " جنية");
-	                }
+        JLabel lblcostFlafl = new JLabel("0.0 جنية");
+        styleLabel(lblcostFlafl);
+        lblcostFlafl.setForeground(successColor);
+        lblcostFlafl.setBounds(20, 40, 100, 30);
+        panelEat.add(lblcostFlafl);
 
-	                output.println("----");
-	                output.println("المجموع: " + subtotal + " جنية");
-	                output.println("الضريبة: " + tax + " جنية");
-	                output.println("الإجمالي: " + total + " جنية");
-	                output.println();
-	                output.println("*** شكرا لطلبك ***");
+        JSpinner spFlafl = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+        spFlafl.setBounds(230, 40, 60, 30);
+        spFlafl.setFont(new Font("Tahoma", Font.BOLD, 14));
+        panelEat.add(spFlafl);
 
-	                output.close();
+        JCheckBox cbBantgan1 = new JCheckBox("باذنجان");
+        styleCheckBox(cbBantgan1);
+        cbBantgan1.setBounds(120, 40, 100, 30);
+        panelEat.add(cbBantgan1);
 
-	            }
-					
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnSaveInvoice.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnSaveInvoice.setBounds(115, 81, 100, 33);
-		panelChoice.add(btnSaveInvoice);
-		
-		JLabel lblnumberOfInvoice = new JLabel("رقم الفاتورة: 0");
-		lblnumberOfInvoice.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblnumberOfInvoice.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblnumberOfInvoice.setBounds(85, 55, 139, 29);
-		contentPane.add(lblnumberOfInvoice);
-		
-		
-		JButton btnNewInvoice = new JButton("فاتورة جديدة");
-		btnNewInvoice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(total != 0)
-				{
-					
-					spinnerNumberFlafl.setValue(0);
-					spinnerNumberFol.setValue(0);
-					spinnerBottleWater.setValue(0);
-					spinnerBottleJuice.setValue(0);
-					
-					spinnerbantgan1.setSelected(false);
-					spinnerbantgan2.setSelected(false);
-            		spinnerIce1.setSelected(false);
-        		    spinnerIce2.setSelected(false);
-        		    
-        		    lblSubTotal.setText("المجموع: 0.0 جنية");
-            		lblTax.setText("الضريبة: 0.0 جنية");
-            		lblTotal.setText("الإجمالي: 0.0 جنية");
+        // Falafel Calculation Logic
+        java.awt.event.ActionListener flaflAction = e -> {
+            flaflNum = (Integer) spFlafl.getValue();
+            // Price = Base + Addon
+            double unitPrice = FLAFL_COST + (cbBantgan1.isSelected() ? EXTRA_EGGPLANT : 0.0);
+            flaflPrice = flaflNum * unitPrice;
+            lblcostFlafl.setText(flaflPrice + " جنية");
+        };
+        spFlafl.addChangeListener(e -> flaflAction.actionPerformed(null));
+        cbBantgan1.addActionListener(flaflAction);
 
-            		subtotal = 0;
-            		tax = 0;
-            		total = 0;
-            		
-					numberOfInvoice++;
-					lblnumberOfInvoice.setText("رقم الفاتورة: " + numberOfInvoice);
-					
-				}
-			}
-		});
-		btnNewInvoice.setBounds(10, 81, 95, 33);
-		panelChoice.add(btnNewInvoice);
-		
-		
-		
-		JSeparator jSeparator1 = new JSeparator();
-		jSeparator1.setBackground(new Color(192, 192, 192));
-		jSeparator1.setBounds(23, 71, 154, 33);
-		panelAccount.add(jSeparator1);
-		panelEat.setLayout(null);
+        // === Foul Item ===
+        JLabel lblFol = new JLabel("سندوتش فول");
+        styleLabel(lblFol);
+        lblFol.setBounds(300, 100, 150, 30);
+        panelEat.add(lblFol);
 
-		contentPane.setLayout(null);
-		contentPane.add(lblNewLabel);
-		contentPane.add(lblNewLabel_1);
-		contentPane.add(panelChoice);
-		contentPane.add(panelDrinks);
-		contentPane.add(panelAccount);
-		contentPane.add(panelEat);
-		
-		
-		JButton btnExit = new JButton("خروج");
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				 System.exit(0);
-			}
-		});
-		btnExit.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnExit.setBounds(10, 25, 84, 36);
-		contentPane.add(btnExit);
+        JLabel lblcostFol = new JLabel("0.0 جنية");
+        styleLabel(lblcostFol);
+        lblcostFol.setForeground(successColor);
+        lblcostFol.setBounds(20, 100, 100, 30);
+        panelEat.add(lblcostFol);
 
-	}
+        JSpinner spFol = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+        spFol.setBounds(230, 100, 60, 30);
+        spFol.setFont(new Font("Tahoma", Font.BOLD, 14));
+        panelEat.add(spFol);
+
+        JCheckBox cbBantgan2 = new JCheckBox("باذنجان");
+        styleCheckBox(cbBantgan2);
+        cbBantgan2.setBounds(120, 100, 100, 30);
+        panelEat.add(cbBantgan2);
+
+        // Foul Calculation Logic
+        java.awt.event.ActionListener folAction = e -> {
+            folNum = (Integer) spFol.getValue();
+            double unitPrice = FOL_COST + (cbBantgan2.isSelected() ? EXTRA_EGGPLANT : 0.0);
+            folPrice = folNum * unitPrice;
+            lblcostFol.setText(folPrice + " جنية");
+        };
+        spFol.addChangeListener(e -> folAction.actionPerformed(null));
+        cbBantgan2.addActionListener(folAction);
+
+
+        // 2. Drinks Panel (Right Bottom)
+        JPanel panelDrinks = new JPanel(null);
+        stylePanel(panelDrinks, "المشروبات");
+
+        // === Water Item ===
+        JLabel lblWater = new JLabel("ماء");
+        styleLabel(lblWater);
+        lblWater.setBounds(300, 40, 150, 30);
+        panelDrinks.add(lblWater);
+
+        JLabel costWater = new JLabel("0.0 جنية");
+        styleLabel(costWater);
+        costWater.setForeground(successColor);
+        costWater.setBounds(20, 40, 100, 30);
+        panelDrinks.add(costWater);
+
+        JSpinner spWater = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+        spWater.setBounds(230, 40, 60, 30);
+        spWater.setFont(new Font("Tahoma", Font.BOLD, 14));
+        panelDrinks.add(spWater);
+
+        JCheckBox cbIce1 = new JCheckBox("ثلج");
+        styleCheckBox(cbIce1);
+        cbIce1.setBounds(150, 40, 70, 30);
+        panelDrinks.add(cbIce1);
+
+        // Water Calculation Logic
+        java.awt.event.ActionListener waterAction = e -> {
+            waterNum = (Integer) spWater.getValue();
+            double unitPrice = WATER_COST + (cbIce1.isSelected() ? EXTRA_ICE : 0.0);
+            waterPrice = waterNum * unitPrice;
+            costWater.setText(waterPrice + " جنية");
+        };
+        spWater.addChangeListener(e -> waterAction.actionPerformed(null));
+        cbIce1.addActionListener(waterAction);
+
+        // === Juice Item ===
+        JLabel lblJuice = new JLabel("عصير");
+        styleLabel(lblJuice);
+        lblJuice.setBounds(300, 100, 150, 30);
+        panelDrinks.add(lblJuice);
+
+        JLabel costJuice = new JLabel("0.0 جنية");
+        styleLabel(costJuice);
+        costJuice.setForeground(successColor);
+        costJuice.setBounds(20, 100, 100, 30);
+        panelDrinks.add(costJuice);
+
+        JSpinner spJuice = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+        spJuice.setBounds(230, 100, 60, 30);
+        spJuice.setFont(new Font("Tahoma", Font.BOLD, 14));
+        panelDrinks.add(spJuice);
+
+        JCheckBox cbIce2 = new JCheckBox("ثلج");
+        styleCheckBox(cbIce2);
+        cbIce2.setBounds(150, 100, 70, 30);
+        panelDrinks.add(cbIce2);
+
+        // Juice Calculation Logic
+        java.awt.event.ActionListener juiceAction = e -> {
+            juiceNum = (Integer) spJuice.getValue();
+            double unitPrice = JUICE_COST + (cbIce2.isSelected() ? EXTRA_ICE : 0.0);
+            juicePrice = juiceNum * unitPrice;
+            costJuice.setText(juicePrice + " جنية");
+        };
+        spJuice.addChangeListener(e -> juiceAction.actionPerformed(null));
+        cbIce2.addActionListener(juiceAction);
+
+
+        // 3. Accounts Panel (Left Top)
+        JPanel panelAccount = new JPanel(null);
+        stylePanel(panelAccount, "الحساب");
+
+        JLabel lblSubTotal = new JLabel("المجموع: 0.0 جنية");
+        styleLabel(lblSubTotal);
+        lblSubTotal.setHorizontalAlignment(SwingConstants.CENTER);
+        lblSubTotal.setBounds(50, 40, 350, 30);
+        panelAccount.add(lblSubTotal);
+
+        JLabel lblTax = new JLabel("الضريبة: 0.0 جنية");
+        styleLabel(lblTax);
+        lblTax.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTax.setBounds(50, 80, 350, 30);
+        panelAccount.add(lblTax);
+
+        JSeparator sep = new JSeparator();
+        sep.setBackground(accentColor);
+        sep.setBounds(50, 120, 350, 10);
+        panelAccount.add(sep);
+
+        JLabel lblTotal = new JLabel("الإجمالي: 0.0 جنية");
+        lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTotal.setForeground(successColor);
+        lblTotal.setFont(new Font("Tahoma", Font.BOLD, 24));
+        lblTotal.setBounds(50, 140, 350, 40);
+        panelAccount.add(lblTotal);
+
+        // 4. Choices/Buttons Panel (Left Bottom)
+        JPanel panelChoice = new JPanel(null);
+        stylePanel(panelChoice, "الخيارات");
+
+        // --- Calculate Button ---
+        JButton btnCalc = new JButton("حساب");
+        styleButton(btnCalc, accentColor);
+        btnCalc.setBounds(50, 30, 350, 50);
+        panelChoice.add(btnCalc);
+        btnCalc.addActionListener(e -> {
+            subtotal = flaflPrice + folPrice + waterPrice + juicePrice;
+            lblSubTotal.setText("المجموع: " + subtotal + " جنية");
+            
+            tax = subtotal * 0.05; // 5% Tax
+            tax = Math.round(tax * 100.0) / 100.0;
+            lblTax.setText("الضريبة: " + tax + " جنية");
+            
+            total = subtotal + tax;
+            lblTotal.setText("الإجمالي: " + total + " جنية");
+        });
+
+        JLabel lblInvNum = new JLabel("رقم الفاتورة: " + numberOfInvoice);
+        styleLabel(lblInvNum);
+        lblInvNum.setHorizontalAlignment(SwingConstants.CENTER);
+        lblInvNum.setBounds(50, 90, 350, 30);
+        panelChoice.add(lblInvNum);
+
+        // --- New/Reset Button ---
+        JButton btnNew = new JButton("جديد");
+        styleButton(btnNew, new Color(230, 126, 34)); // Orange
+        btnNew.setBounds(50, 130, 160, 45);
+        panelChoice.add(btnNew);
+        btnNew.addActionListener(e -> {
+            if(total != 0) {
+                // Reset all controls
+                spFlafl.setValue(0); spFol.setValue(0);
+                spWater.setValue(0); spJuice.setValue(0);
+                cbBantgan1.setSelected(false); cbBantgan2.setSelected(false);
+                cbIce1.setSelected(false); cbIce2.setSelected(false);
+                
+                // Reset totals
+                subtotal = 0; tax = 0; total = 0;
+                lblSubTotal.setText("المجموع: 0.0 جنية");
+                lblTax.setText("الضريبة: 0.0 جنية");
+                lblTotal.setText("الإجمالي: 0.0 جنية");
+                
+                numberOfInvoice++;
+                lblInvNum.setText("رقم الفاتورة: " + numberOfInvoice);
+            }
+        });
+
+        // --- Save Invoice Button ---
+        JButton btnSave = new JButton("حفظ");
+        styleButton(btnSave, successColor); // Green
+        btnSave.setBounds(240, 130, 160, 45);
+        panelChoice.add(btnSave);
+        btnSave.addActionListener(e -> {
+            try {
+                if(total != 0) {
+                    // 1. Define Path and Directory
+                    String folderPath = "C:\\Users\\ahmed\\Downloads\\Resturant_Manegement\\Resturant_Manegement\\الفاتوره\\";
+                    File directory = new File(folderPath);
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+
+                    // 2. Setup File Writing
+                    String fullPath = folderPath + "فاتورة_رقم_" + numberOfInvoice + ".txt";
+                    File file = new File(fullPath);
+                    output = new PrintWriter(file);
+                    
+                    // 3. Write Invoice Content
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
+                    LocalDateTime now = LocalDateTime.now(); 
+                    
+                    output.println("******** مطعم فلافل ********");
+                    output.println("رقم الفاتورة: " + numberOfInvoice);
+                    output.println("التاريخ: " + dtf.format(now));
+                    output.println("============================");
+                    
+                    if(flaflNum > 0) {
+                        String extra = cbBantgan1.isSelected() ? " (بالباذنجان)" : "";
+                        output.println(flaflNum + "x فلافل" + extra + " ... " + flaflPrice);
+                    }
+                    if(folNum > 0) {
+                        String extra = cbBantgan2.isSelected() ? " (بالباذنجان)" : "";
+                        output.println(folNum + "x فول" + extra + " ....... " + folPrice);
+                    }
+                    if(waterNum > 0) {
+                        String extra = cbIce1.isSelected() ? " (مثلج)" : "";
+                        output.println(waterNum + "x ماء" + extra + " ....... " + waterPrice);
+                    }
+                    if(juiceNum > 0) {
+                        String extra = cbIce2.isSelected() ? " (مثلج)" : "";
+                        output.println(juiceNum + "x عصير" + extra + " ...... " + juicePrice);
+                    }
+                    
+                    output.println("----------------------------");
+                    output.println("المجموع:  " + subtotal);
+                    output.println("الضريبة:  " + tax);
+                    output.println("الإجمالي: " + total + " جنية");
+                    output.println("============================");
+                    output.println("     شكراً لزيارتكم");
+                    output.close();
+                    
+                    JOptionPane.showMessageDialog(null, "تم حفظ الفاتورة بنجاح في المسار:\n" + file.getAbsolutePath());
+                } else {
+                    JOptionPane.showMessageDialog(null, "لا يوجد طلبات لحفظها!", "تنبيه", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        rightColumn.add(panelEat);
+        rightColumn.add(panelDrinks);
+        leftColumn.add(panelAccount);
+        leftColumn.add(panelChoice);
+        
+        centerGrid.add(leftColumn);
+        centerGrid.add(rightColumn);
+        
+        contentPane.add(centerGrid, BorderLayout.CENTER);
+    }
+
+    // --- UI Styling Helper Methods ---
+    private void stylePanel(JPanel p, String t) {
+        p.setBackground(panelBackground);
+        p.setBorder(new TitledBorder(new LineBorder(accentColor, 2, true), t,
+                TitledBorder.RIGHT, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 18), accentColor));
+    }
+    private void styleLabel(JLabel l) {
+        l.setForeground(textColor);
+        l.setFont(new Font("Tahoma", Font.BOLD, 16));
+        l.setHorizontalAlignment(SwingConstants.RIGHT);
+    }
+    private void styleCheckBox(JCheckBox c) {
+        c.setBackground(panelBackground);
+        c.setForeground(textColor);
+        c.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        c.setHorizontalAlignment(SwingConstants.RIGHT);
+        c.setHorizontalTextPosition(SwingConstants.LEFT);
+    }
+    private void styleButton(JButton b, Color c) {
+        b.setBackground(c);
+        b.setForeground(Color.WHITE);
+        b.setFont(new Font("Tahoma", Font.BOLD, 18));
+        b.setFocusPainted(false);
+        b.setBorderPainted(false);
+        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
 }
